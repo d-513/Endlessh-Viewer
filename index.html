@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Endlessh VIEWER</title>
+  </head>
+  <body>
+    <canvas id="chart"></canvas>
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.5.0/chart.min.js"
+      integrity="sha512-asxKqQghC1oBShyhiBwA+YgotaSYKxGP1rcSYTDrB0U6DxwlJjU59B67U8+5/++uFjcuVM8Hh5cokLjZlhm3Vg=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    ></script>
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.21.1/axios.min.js"
+      integrity="sha512-bZS47S7sPOxkjU/4Bt0zrhEtWx0y0CRkhEp8IckzK+ltifIIE9EMIMTuT/mEzoIMewUINruDBIR/jJnbguonqQ=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    ></script>
+    <script>
+      async function loader() {
+        const { data } = await axios.get("/countries.json");
+
+        const counts = {};
+        data.countries.forEach(function (x) {
+          counts[x] = (counts[x] || 0) + 1;
+        });
+        const chartData = {
+          labels: [...new Set(data.countries)],
+          datasets: [
+            {
+              label: "Honeypot IP list",
+              data: Object.values(counts),
+              backgroundColor: data.colors,
+              hoverOffset: 4,
+            },
+          ],
+        };
+        const config = {
+          type: "pie",
+          data: chartData,
+          options: {
+            aspectRatio: 2,
+          },
+        };
+
+        const myChart = new Chart(document.getElementById("chart"), config);
+      }
+      loader();
+    </script>
+  </body>
+</html>

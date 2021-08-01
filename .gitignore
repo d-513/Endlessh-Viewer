@@ -1,0 +1,5 @@
+honeypot.log
+node_modules
+IPs.json
+countries.json
+.env
